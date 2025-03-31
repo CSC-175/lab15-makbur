@@ -1,10 +1,18 @@
 #include <iostream>
+#include <limits>
 using namespace std;
 
 // Function prototypes
 void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
+void clearInputStream(); // Utility function to clear input stream
+
+void clearInputStream()
+{
+    cin.clear(); // Clear the error state
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+}
 
 /*******************************************************************
 * getInfo                                                          *
@@ -13,71 +21,78 @@ double factorial(int);
 *******************************************************************/
 void getInfo(int& pickFrom, int& numPicks) {
     while (true) {
-        // Get the number of balls to pick from
         cout << "How many balls (1-12) are in the pool to pick from? ";
-        cin >> pickFrom;
+        if (!(cin >> pickFrom)) {
+            clearInputStream();
+            cout << "Input Error!\n";
+            continue;
+        }
 
-        // Validate the number of balls to pick from
         if (pickFrom < 1 || pickFrom > 12) {
             cout << "Input Error! There must be between 1 and 12 balls.\n";
             continue;
         }
 
-        // Get the number of balls to draw
-        cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
-        cin >> numPicks;
+        while (true) {
+            cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
+            if (!(cin >> numPicks)) {
+                clearInputStream();
+                cout << "Input Error!\n";
+                continue;
+            }
 
-        // Validate the number of balls to draw
-        if (numPicks < 1 || numPicks > pickFrom) {
-            cout << "Input Error! Number of picks must be between 1 and " << pickFrom << ".\n";
-            continue;
+            if (numPicks < 1 || numPicks > pickFrom) {
+                cout << "Input Error!\n";
+                continue;
+            }
+
+            break; // Break the inner loop if numPicks is valid
         }
 
-        // If validation passes, break out of the loop
-        break;
+        break; // Break the outer loop if all inputs are valid
     }
 }
 
 /*******************************************************************
-* computeWays                                                       *
+* computeWays                                                      *
 * Computes and returns the number of different possible sets       *
 * of k numbers that can be chosen from a set of n numbers.         *
-* The formula for this is: k!(n - k)! / n!                         *
+* The formula for this is: n! / (k!(n - k)!)                       *
 *******************************************************************/
 double computeWays(int n, int k) {
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
 /*******************************************************************
-* factorial                                                         *
+* factorial                                                        *
 * This function computes factorials recursively.                   *
 *******************************************************************/
 double factorial(int n) {
-    // Base case: 0! = 1 and 1! = 1
     if (n == 0 || n == 1) {
         return 1;
     }
-    // Recursive case: n! = n * (n-1)!
     return n * factorial(n - 1);
 }
 
 int main() {
-    int pickFrom, // The number of numbers to pick from
-        numPicks; // The number of numbers to select
-    double ways; // The number of different possible
-                 // ways to pick the set of numbers
+    int pickFrom, numPicks;
+    double ways;
     char again;
 
     do {
         getInfo(pickFrom, numPicks);
         ways = computeWays(pickFrom, numPicks);
+
         cout.setf(ios::fixed);
         cout.precision(4);
-        cout << "\nProbability of winning is " << ways;
-        cout << "\nOdds of winning are 1 in " << int(1/ways);
-        cout << "\n\nWould you like to calculate the probability of another scenario? (y/n): ";
+        cout << "\nProbability of winning is " << (1.0/ways) << "\n";
+        cout << "Odds of winning are 1 in " << static_cast<int>(ways) << "\n";
+
+        cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
         cin >> again;
-    } while (again == 'y' or again == 'Y');
+        clearInputStream();  // Clear any residual input after reading a single char
+        cout << "\n";
+    } while (again == 'y' || again == 'Y');
 
     return 0;
 }
