@@ -1,12 +1,13 @@
 #include <iostream>
 #include <limits>
-#include <iomanip>
+#include <iomanip> // For controlling output formatting
 using namespace std;
 
 // Function prototypes
 void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
+void printResults(int, int); // Updated to print results with correct formatting
 void clearInputStream();  // Utility function to clear input stream
 
 // Function to clear the input stream in case of invalid input
@@ -49,6 +50,16 @@ void getInfo(int& pickFrom, int& numPicks) {
 }
 
 /*******************************************************************
+* computeWays                                                      *
+* Computes and returns the number of different possible sets       *
+* of k numbers that can be chosen from a set of n numbers.         *
+* The formula for this is: n! / (k!(n - k)!)                       *
+*******************************************************************/
+double computeWays(int n, int k) {
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+/*******************************************************************
 * factorial                                                        *
 * This function computes factorials recursively.                   *
 *******************************************************************/
@@ -60,46 +71,24 @@ double factorial(int n) {
 }
 
 /*******************************************************************
-* computeWays                                                      *
-* Computes and returns the number of different possible sets       *
-* of k numbers that can be chosen from a set of n numbers.         *
-* The formula for this is: n! / (k!(n - k)!)                       *
-*******************************************************************/
-double computeWays(int n, int k) {
-    if (k == 0 || k == n) return 1;
-    return factorial(n) / (factorial(k) * factorial(n - k));
-}
-
-/*******************************************************************
 * printResults                                                     *
-* This function prints the probability and odds of winning based    *
-* on the user's input.                                             *
+* This function calculates and prints the probability and odds of   *
+* winning based on the number of balls in the pool and the number  *
+* of balls drawn. The format is aligned with the test expectations. *
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
-    // Compute the total number of possible outcomes (combinations)
-    double successfulWays = computeWays(pickFrom, numPicks);
-    double totalWays = computeWays(pickFrom, 0);  // This is simply the factorial of the pool size
+    double totalWays = computeWays(pickFrom, numPicks);  // Total possible outcomes
+    double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Calculate probability of winning
-    double probability = successfulWays / totalWays;
+    // Calculate probability and odds
+    double probability = 1.0 / totalOutcomes; // Probabilty of winning
+    double odds = 1.0 / probability - 1;  // Odds of winning
 
-    // Calculate odds of winning
-    double odds = (totalWays - successfulWays) / successfulWays;
-
-    // Display results
-    cout << fixed << setprecision(4);
+    // Print results with appropriate formatting
+    cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
-    cout << "Odds of winning are 1 in " << (1 / odds) << endl;
+    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
+    cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
 }
 
-int main() {
-    int pickFrom, numPicks;
 
-    // Step 1: Get user input
-    getInfo(pickFrom, numPicks);
-
-    // Step 2: Compute and print results
-    printResults(pickFrom, numPicks);
-
-    return 0;
-}
