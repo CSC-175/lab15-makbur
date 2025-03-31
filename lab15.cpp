@@ -1,20 +1,18 @@
 #include <iostream>
 #include <limits>
-#include <iomanip>
-
+#include <iomanip>  // For controlling output formatting
 using namespace std;
 
 // Function prototypes
 void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
-void clearInputStream();
-void printResults(int, int);
+void clearInputStream();  // Utility function to clear input stream
 
 // Function to clear the input stream in case of invalid input
 void clearInputStream() {
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.clear();  // Clear the error state
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
 }
 
 /*******************************************************************
@@ -26,15 +24,17 @@ void getInfo(int& pickFrom, int& numPicks) {
     while (true) {
         cout << "How many balls (1-12) are in the pool to pick from? ";
 
+        // Validate pickFrom to ensure it's an integer between 1 and 12
         if (!(cin >> pickFrom) || pickFrom < 1 || pickFrom > 12) {
             clearInputStream();
-            cout << "Input Error! There must be between 1 and 12 balls.\n";
+            cout << "Input Error! Please enter a number between 1 and 12.\n";
             continue;
         }
 
         while (true) {
             cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
 
+            // Validate numPicks to ensure it's an integer between 1 and pickFrom
             if (!(cin >> numPicks) || numPicks < 1 || numPicks > pickFrom) {
                 clearInputStream();
                 cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
@@ -55,7 +55,6 @@ void getInfo(int& pickFrom, int& numPicks) {
 * The formula for this is: n! / (k!(n - k)!)                       *
 *******************************************************************/
 double computeWays(int n, int k) {
-    if (k > n) return 0;
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
@@ -72,42 +71,25 @@ double factorial(int n) {
 
 /*******************************************************************
 * printResults                                                     *
-* This function calculates and prints the probability and odds of  *
+* This function calculates and prints the probability and odds of   *
 * winning based on the number of balls in the pool and the number  *
-* of balls drawn. The format is aligned with the test expectations.*
+* of balls drawn. The format is aligned with the test expectations. *
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
     // Calculate the number of ways to win (combinations)
-    double successfulWays = computeWays(pickFrom, numPicks);
+    double totalWays = computeWays(pickFrom, numPicks);
 
-    // Total combinations from the selection of pickFrom
-    double totalOutcomes = successfulWays;
+    // Calculate the total possible outcomes (since it's a lottery, it is same as totalWays)
+    double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Calculate probability and odds
-    double probability = 1.0 / successfulWays;
-    double odds = successfulWays;
+    // Calculate probability (winning ways / total possible outcomes)
+    double probability = totalWays / totalOutcomes;
 
-    cout << fixed << setprecision(4);
+    // Odds calculation (inverse of probability)
+    double odds = 1.0 / probability;
+
+    // Ensure results match expected format
+    cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
-    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
-}
-
-int main() {
-    char repeat;
-    do {
-        int pickFrom, numPicks;
-
-        // Get valid lottery numbers from the user
-        getInfo(pickFrom, numPicks);
-
-        // Print the calculated probability and odds
-        printResults(pickFrom, numPicks);
-
-        // Prompt for another calculation
-        cout << "Would you like to calculate the probability of another scenario? (y/n): ";
-        cin >> repeat;
-
-    } while (repeat == 'y' || repeat == 'Y');
-
-    return 0;
+    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl; // Correct "1 in" formatting
 }
