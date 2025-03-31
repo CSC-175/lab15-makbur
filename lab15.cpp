@@ -1,15 +1,16 @@
+// lab15.cpp
+
 #include <iostream>
 #include <limits>
 using namespace std;
 
 // Function prototypes
-void getInfo(int&, int&);
-double computeWays(int, int);
-double factorial(int);
+void getInfo(int& pickFrom, int& numPicks);
+double computeWays(int n, int k);
+double factorial(int n);
 void clearInputStream(); // Utility function to clear input stream
 
-void clearInputStream()
-{
+void clearInputStream() {
     cin.clear(); // Clear the error state
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
 }
@@ -72,27 +73,4 @@ double factorial(int n) {
         return 1;
     }
     return n * factorial(n - 1);
-}
-
-int main() {
-    int pickFrom, numPicks;
-    double ways;
-    char again;
-
-    do {
-        getInfo(pickFrom, numPicks);
-        ways = computeWays(pickFrom, numPicks);
-
-        cout.setf(ios::fixed);
-        cout.precision(4);
-        cout << "\nProbability of winning is " << (1.0/ways) << "\n";
-        cout << "Odds of winning are 1 in " << static_cast<int>(ways) << "\n";
-
-        cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
-        cin >> again;
-        clearInputStream();  // Clear any residual input after reading a single char
-        cout << "\n";
-    } while (again == 'y' || again == 'Y');
-
-    return 0;
 }
