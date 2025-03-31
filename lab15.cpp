@@ -6,13 +6,12 @@ using namespace std;
 void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
-void clearInputStream(); // Utility function to clear input stream
+void clearInputStream();  // Utility function to clear input stream
 
-// Function to clear any residual input in the stream
-void clearInputStream()
-{
-    cin.clear(); // Clear the error state
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+// Function to clear the input stream in case of invalid input
+void clearInputStream() {
+    cin.clear();  // Clear the error state
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
 }
 
 /*******************************************************************
