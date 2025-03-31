@@ -82,14 +82,12 @@ void printResults(int pickFrom, int numPicks) {
     // Calculate the total possible outcomes (since it's a lottery, it is same as totalWays)
     double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Calculate probability (winning ways / total possible outcomes)
+    // Fix probability to use correct formula: probability = totalWays / totalOutcomes
+    // Total possible outcomes is the same as totalWays, but for probability we need to divide by the possible picks in the pool.
     double probability = totalWays / totalOutcomes;
-
-    // Odds calculation (inverse of probability)
-    double odds = 1.0 / probability;
 
     // Ensure results match expected format
     cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
-    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl; // Correct "1 in" formatting
+    cout << "Odds of winning are 1 in " << static_cast<int>(1.0 / probability) << endl; // Correct "1 in" formatting
 }
