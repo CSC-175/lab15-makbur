@@ -49,19 +49,6 @@ void getInfo(int& pickFrom, int& numPicks) {
 }
 
 /*******************************************************************
-* computeWays                                                      *
-* Computes and returns the number of different possible sets       *
-* of k numbers that can be chosen from a set of n numbers.         *
-* The formula for this is: n! / (k!(n - k)!)                       *
-*******************************************************************/
-double computeWays(int n, int k) {
-    if (k > n) {
-        return 0;  // If k > n, return 0 as it's not possible to choose
-    }
-    return factorial(n) / (factorial(k) * factorial(n - k));
-}
-
-/*******************************************************************
 * factorial                                                        *
 * This function computes factorials recursively.                   *
 *******************************************************************/
@@ -73,23 +60,33 @@ double factorial(int n) {
 }
 
 /*******************************************************************
+* computeWays                                                      *
+* Computes and returns the number of different possible sets       *
+* of k numbers that can be chosen from a set of n numbers.         *
+* The formula for this is: n! / (k!(n - k)!)                       *
+*******************************************************************/
+double computeWays(int n, int k) {
+    if (k == 0 || k == n) return 1;
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+/*******************************************************************
 * printResults                                                     *
 * This function prints the probability and odds of winning based    *
 * on the user's input.                                             *
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
-    // Compute the total number of ways to pick `numPicks` balls from `pickFrom`
+    // Compute the total number of possible outcomes (combinations)
     double successfulWays = computeWays(pickFrom, numPicks);
-    // Compute the total number of ways to choose `numPicks` balls from `pickFrom`
     double totalWays = computeWays(pickFrom, 0);  // This is simply the factorial of the pool size
 
-    // Fix the probability calculation
+    // Calculate probability of winning
     double probability = successfulWays / totalWays;
 
-    // Fix the odds calculation
+    // Calculate odds of winning
     double odds = (totalWays - successfulWays) / successfulWays;
 
-    // Display results with required precision
+    // Display results
     cout << fixed << setprecision(4);
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << (1 / odds) << endl;
