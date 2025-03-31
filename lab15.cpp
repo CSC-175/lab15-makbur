@@ -81,7 +81,8 @@ void printResults(int pickFrom, int numPicks) {
     double totalWays = computeWays(pickFrom, numPicks);
 
     // Calculate probability (winning ways / total possible outcomes)
-    double probability = totalWays / computeWays(pickFrom, numPicks);
+    double totalOutcomes = computeWays(pickFrom, numPicks);
+    double probability = totalWays / totalOutcomes;
 
     // Odds calculation (inverse of probability)
     double odds = 1.0 / probability - 1;
@@ -90,6 +91,4 @@ void printResults(int pickFrom, int numPicks) {
     cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
-    cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
 }
-
