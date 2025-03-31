@@ -24,12 +24,12 @@ void getInfo(int& pickFrom, int& numPicks) {
         cout << "How many balls (1-12) are in the pool to pick from? ";
         if (!(cin >> pickFrom)) {
             clearInputStream();
-            cout << "Input Error!\n";
+            cout << "Input Error! Please enter a number between 1 and 12.\n";
             continue;
         }
 
         if (pickFrom < 1 || pickFrom > 12) {
-            cout << "Input Error! There must be between 1 and 12 balls.\n";
+            cout << "Input Error! The number of balls must be between 1 and 12.\n";
             continue;
         }
 
@@ -37,12 +37,12 @@ void getInfo(int& pickFrom, int& numPicks) {
             cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
             if (!(cin >> numPicks)) {
                 clearInputStream();
-                cout << "Input Error!\n";
+                cout << "Input Error! Please enter a valid number.\n";
                 continue;
             }
 
             if (numPicks < 1 || numPicks > pickFrom) {
-                cout << "Input Error!\n";
+                cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
                 continue;
             }
 
