@@ -26,7 +26,6 @@ void getInfo(int& pickFrom, int& numPicks) {
     while (true) {
         cout << "How many balls (1-12) are in the pool to pick from? ";
 
-        // Validate pickFrom to ensure it's an integer between 1 and 12
         if (!(cin >> pickFrom) || pickFrom < 1 || pickFrom > 12) {
             clearInputStream();
             cout << "Input Error! There must be between 1 and 12 balls.\n";
@@ -36,7 +35,6 @@ void getInfo(int& pickFrom, int& numPicks) {
         while (true) {
             cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
 
-            // Validate numPicks to ensure it's an integer between 1 and pickFrom
             if (!(cin >> numPicks) || numPicks < 1 || numPicks > pickFrom) {
                 clearInputStream();
                 cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
@@ -82,14 +80,13 @@ void printResults(int pickFrom, int numPicks) {
     // Calculate the number of ways to win (combinations)
     double successfulWays = computeWays(pickFrom, numPicks);
 
-    // Total outcomes are all possible draws from the available pool
-    double totalOutcomes = computeWays(pickFrom, numPicks);
+    // Total combinations from the selection of pickFrom
+    double totalOutcomes = successfulWays;
 
     // Calculate probability and odds
-    double probability = successfulWays / totalOutcomes;
-    double odds = totalOutcomes / successfulWays;
+    double probability = 1.0 / successfulWays;
+    double odds = successfulWays;
 
-    // Ensure results match expected format
     cout << fixed << setprecision(4);
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
@@ -100,7 +97,7 @@ int main() {
     do {
         int pickFrom, numPicks;
 
-        // Get valid lottery info
+        // Get valid lottery numbers from the user
         getInfo(pickFrom, numPicks);
 
         // Print the calculated probability and odds
