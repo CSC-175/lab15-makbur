@@ -1,16 +1,7 @@
-#ifndef LAB15_MAIN
-#define LAB15_MAIN
-
 #include <iostream>
 #include <limits>
 #include <iomanip>
 using namespace std;
-
-// Function prototypes
-void getInfo(int&, int&);
-double computeWays(int, int);
-double factorial(int);
-void printResults(int, int);
 
 void getInfo(int& pickFrom, int& numPicks) {
     while (true) {
@@ -50,12 +41,3 @@ void printResults(int pickFrom, int numPicks) {
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << static_cast<int>(1.0 / probability) << endl;
 }
-
-int main() {
-    int pickFrom, numPicks;
-    getInfo(pickFrom, numPicks);
-    printResults(pickFrom, numPicks);
-    return 0;
-}
-
-#endif // LAB15_MAIN
