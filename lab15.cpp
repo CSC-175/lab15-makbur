@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <iomanip>
 using namespace std;
 
 // Function prototypes
@@ -66,5 +67,31 @@ double factorial(int n) {
         return 1;
     }
     return n * factorial(n - 1);
+}
 
+/*******************************************************************
+* printResults                                                     *
+* This function prints the probability and odds of winning based    *
+* on the user's input.                                             *
+*******************************************************************/
+void printResults(int pickFrom, int numPicks) {
+    double probability = (double)numPicks / (double)pickFrom;
+    double odds = (double)(pickFrom - numPicks) / (double)numPicks;
+
+    // Display results with required precision
+    cout << fixed << setprecision(4);
+    cout << "Probability of winning is " << probability << endl;
+    cout << "Odds of winning are 1 in " << (1 / odds) << endl;
+}
+
+int main() {
+    int pickFrom, numPicks;
+
+    // Step 1: Get user input
+    getInfo(pickFrom, numPicks);
+
+    // Step 2: Compute and print results
+    printResults(pickFrom, numPicks);
+
+    return 0;
 }
