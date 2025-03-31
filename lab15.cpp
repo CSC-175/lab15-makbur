@@ -8,6 +8,7 @@ void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
 void clearInputStream();  // Utility function to clear input stream
+void printResults(int, int);
 
 // Function to clear the input stream in case of invalid input
 void clearInputStream() {
@@ -79,15 +80,36 @@ void printResults(int pickFrom, int numPicks) {
     // Calculate the number of ways to win (combinations)
     double totalWays = computeWays(pickFrom, numPicks);
 
-    // Calculate the total possible outcomes (since it's a lottery, it is same as totalWays)
+    // The total number of possible outcomes is just the number of ways to choose the numbers.
     double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Fix probability to use correct formula: probability = totalWays / totalOutcomes
-    // Total possible outcomes is the same as totalWays, but for probability we need to divide by the possible picks in the pool.
+    // Calculate the probability of winning
     double probability = totalWays / totalOutcomes;
 
     // Ensure results match expected format
     cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << static_cast<int>(1.0 / probability) << endl; // Correct "1 in" formatting
+
+    // Ask if the user wants to run another calculation (only after results are shown)
+    char retry;
+    cout << "Would you like to calculate the probability of another scenario? (y/n): ";
+    cin >> retry;
+    if (retry == 'y' || retry == 'Y') {
+        int newPickFrom, newNumPicks;
+        getInfo(newPickFrom, newNumPicks);
+        printResults(newPickFrom, newNumPicks);
+    }
+}
+
+int main() {
+    int pickFrom, numPicks;
+
+    // Get the user's input
+    getInfo(pickFrom, numPicks);
+
+    // Print the results
+    printResults(pickFrom, numPicks);
+
+    return 0;
 }
