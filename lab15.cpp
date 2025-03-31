@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <iomanip>
 using namespace std;
 
 // Function prototypes
@@ -54,6 +55,9 @@ void getInfo(int& pickFrom, int& numPicks) {
 * The formula for this is: n! / (k!(n - k)!)                       *
 *******************************************************************/
 double computeWays(int n, int k) {
+    if (k > n) {
+        return 0;  // If k > n, return 0 as it's not possible to choose
+    }
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
@@ -66,4 +70,39 @@ double factorial(int n) {
         return 1;
     }
     return n * factorial(n - 1);
+}
+
+/*******************************************************************
+* printResults                                                     *
+* This function prints the probability and odds of winning based    *
+* on the user's input.                                             *
+*******************************************************************/
+void printResults(int pickFrom, int numPicks) {
+    // Compute the total number of ways to pick `numPicks` balls from `pickFrom`
+    double successfulWays = computeWays(pickFrom, numPicks);
+    // Compute the total number of ways to choose `numPicks` balls from `pickFrom`
+    double totalWays = computeWays(pickFrom, 0);  // This is simply the factorial of the pool size
+
+    // Fix the probability calculation
+    double probability = successfulWays / totalWays;
+
+    // Fix the odds calculation
+    double odds = (totalWays - successfulWays) / successfulWays;
+
+    // Display results with required precision
+    cout << fixed << setprecision(4);
+    cout << "Probability of winning is " << probability << endl;
+    cout << "Odds of winning are 1 in " << (1 / odds) << endl;
+}
+
+int main() {
+    int pickFrom, numPicks;
+
+    // Step 1: Get user input
+    getInfo(pickFrom, numPicks);
+
+    // Step 2: Compute and print results
+    printResults(pickFrom, numPicks);
+
+    return 0;
 }
