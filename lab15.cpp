@@ -1,66 +1,95 @@
 #include <iostream>
 #include <limits>
-#include <iomanip>
+#include <iomanip>  // For controlling output formatting
 using namespace std;
 
+// Function prototypes
+void getInfo(int&, int&);
+double computeWays(int, int);
+double factorial(int);
+void clearInputStream();  // Utility function to clear input stream
+
+// Function to clear the input stream in case of invalid input
+void clearInputStream() {
+    cin.clear();  // Clear the error state
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+}
+
+/*******************************************************************
+* getInfo                                                          *
+* Gets and validates lottery info from the user and places it in   *
+* reference parameters referencing variables in the main function. *
+*******************************************************************/
 void getInfo(int& pickFrom, int& numPicks) {
-    // Loop to ensure valid input for number of balls in the pool
     while (true) {
         cout << "How many balls (1-12) are in the pool to pick from? ";
+
+        // Validate pickFrom to ensure it's an integer between 1 and 12
         if (!(cin >> pickFrom) || pickFrom < 1 || pickFrom > 12) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            clearInputStream();
             cout << "Input Error! Please enter a number between 1 and 12.\n";
             continue;
         }
-        // Loop to ensure valid input for number of balls drawn
-        cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
-        if (!(cin >> numPicks) || numPicks < 1 || numPicks > pickFrom) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
-            continue;
+
+        while (true) {
+            cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
+
+            // Validate numPicks to ensure it's an integer between 1 and pickFrom
+            if (!(cin >> numPicks) || numPicks < 1 || numPicks > pickFrom) {
+                clearInputStream();
+                cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
+                continue;
+            }
+
+            break; // Break inner loop when numPicks is valid
         }
-        break;  // Exit loop once valid inputs are obtained
+
+        break; // Break outer loop when both inputs are valid
     }
 }
 
+/*******************************************************************
+* computeWays                                                      *
+* Computes and returns the number of different possible sets       *
+* of k numbers that can be chosen from a set of n numbers.         *
+* The formula for this is: n! / (k!(n - k)!)                       *
+*******************************************************************/
 double computeWays(int n, int k) {
-    double result = 1;
-    // Calculate the number of ways to choose k objects from n
-    for (int i = 0; i < k; ++i) {
-        result *= (n - i);  // Multiplying by remaining numbers
-        result /= (i + 1);  // Dividing by the corresponding factorial part
-    }
-    return result;  // Return the computed result
+    return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
+/*******************************************************************
+* factorial                                                        *
+* This function computes factorials recursively.                   *
+*******************************************************************/
+double factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+/*******************************************************************
+* printResults                                                     *
+* This function calculates and prints the probability and odds of   *
+* winning based on the number of balls in the pool and the number  *
+* of balls drawn. The format is aligned with the test expectations. *
+*******************************************************************/
 void printResults(int pickFrom, int numPicks) {
-    // Compute the total number of ways to pick the balls
+    // Calculate the number of ways to win (combinations)
     double totalWays = computeWays(pickFrom, numPicks);
+
+    // Calculate the total possible outcomes (since it's a lottery, it is same as totalWays)
     double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Calculate probability of winning
+    // Calculate probability (winning ways / total possible outcomes)
     double probability = totalWays / totalOutcomes;
 
-    // Print results in the specified format with precision
-    cout << fixed << setprecision(4);
+    // Odds calculation (inverse of probability)
+    double odds = 1.0 / probability;
+
+    // Ensure results match expected format
+    cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
-    cout << "Odds of winning are 1 in " << static_cast<int>(1.0 / probability) << endl;
+    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl; // Correct "1 in" formatting
 }
-
-void playGame() {
-    int pickFrom = 0, numPicks = 0;
-    char another = 'y';
-
-    // Loop to allow user to play multiple times
-    while (another == 'y' || another == 'Y') {
-        getInfo(pickFrom, numPicks);  // Get user input
-        printResults(pickFrom, numPicks);  // Print results for the current scenario
-        // Ask if the user wants to play again
-        cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
-        cin >> another;
-        cin.ignore();  // Clean up input buffer to handle 'y' or 'n'
-    }
-}
-
