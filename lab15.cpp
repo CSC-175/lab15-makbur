@@ -22,34 +22,28 @@ void clearInputStream() {
 void getInfo(int& pickFrom, int& numPicks) {
     while (true) {
         cout << "How many balls (1-12) are in the pool to pick from? ";
-        if (!(cin >> pickFrom)) {
+
+        // Validate pickFrom to ensure it's an integer between 1 and 12
+        if (!(cin >> pickFrom) || pickFrom < 1 || pickFrom > 12) {
             clearInputStream();
             cout << "Input Error! Please enter a number between 1 and 12.\n";
             continue;
         }
 
-        if (pickFrom < 1 || pickFrom > 12) {
-            cout << "Input Error! The number of balls must be between 1 and 12.\n";
-            continue;
-        }
-
         while (true) {
             cout << "How many balls (1-" << pickFrom << ") will be drawn? ";
-            if (!(cin >> numPicks)) {
-                clearInputStream();
-                cout << "Input Error! Please enter a valid number.\n";
-                continue;
-            }
 
-            if (numPicks < 1 || numPicks > pickFrom) {
+            // Validate numPicks to ensure it's an integer between 1 and pickFrom
+            if (!(cin >> numPicks) || numPicks < 1 || numPicks > pickFrom) {
+                clearInputStream();
                 cout << "Input Error! Number of balls drawn must be between 1 and " << pickFrom << ".\n";
                 continue;
             }
 
-            break; // Break the inner loop if numPicks is valid
+            break; // Break inner loop when numPicks is valid
         }
 
-        break; // Break the outer loop if all inputs are valid
+        break; // Break outer loop when both inputs are valid
     }
 }
 
