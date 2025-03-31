@@ -75,7 +75,9 @@ double factorial(int n) {
 * on the user's input.                                             *
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
+    // Fix the probability calculation
     double probability = (double)numPicks / (double)pickFrom;
+    // Fix the odds calculation
     double odds = (double)(pickFrom - numPicks) / (double)numPicks;
 
     // Display results with required precision
