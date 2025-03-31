@@ -1,18 +1,20 @@
 #include <iostream>
 #include <limits>
-#include <iomanip>  // For controlling output formatting
+#include <iomanip>
+
 using namespace std;
 
 // Function prototypes
 void getInfo(int&, int&);
 double computeWays(int, int);
 double factorial(int);
-void clearInputStream();  // Utility function to clear input stream
+void clearInputStream();
+void printResults(int, int);
 
 // Function to clear the input stream in case of invalid input
 void clearInputStream() {
-    cin.clear();  // Clear the error state
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 /*******************************************************************
@@ -71,25 +73,43 @@ double factorial(int n) {
 
 /*******************************************************************
 * printResults                                                     *
-* This function calculates and prints the probability and odds of   *
+* This function calculates and prints the probability and odds of  *
 * winning based on the number of balls in the pool and the number  *
-* of balls drawn. The format is aligned with the test expectations. *
+* of balls drawn. The format is aligned with the test expectations.*
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
     // Calculate the number of ways to win (combinations)
-    double totalWays = computeWays(pickFrom, numPicks);
+    double successfulWays = computeWays(pickFrom, numPicks);
 
-    // Calculate the total possible outcomes (since it's a lottery, it is same as totalWays)
+    // Calculate total possible combinations from the pool
     double totalOutcomes = computeWays(pickFrom, numPicks);
 
-    // Calculate probability (winning ways / total possible outcomes)
-    double probability = totalWays / totalOutcomes;
-
-    // Odds calculation (inverse of probability)
-    double odds = 1.0 / probability;
+    // Calculate probability and odds
+    double probability = successfulWays / totalOutcomes;
+    double odds = totalOutcomes / successfulWays;
 
     // Ensure results match expected format
-    cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
+    cout << fixed << setprecision(4);
     cout << "Probability of winning is " << probability << endl;
-    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl; // Correct "1 in" formatting
+    cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
+}
+
+int main() {
+    char repeat;
+    do {
+        int pickFrom, numPicks;
+
+        // Get valid lottery info
+        getInfo(pickFrom, numPicks);
+
+        // Print the calculated probability and odds
+        printResults(pickFrom, numPicks);
+
+        // Prompt for another calculation
+        cout << "Would you like to calculate the probability of another scenario? (y/n): ";
+        cin >> repeat;
+
+    } while (repeat == 'y' || repeat == 'Y');
+
+    return 0;
 }
