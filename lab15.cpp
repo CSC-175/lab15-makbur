@@ -77,18 +77,19 @@ double factorial(int n) {
 * of balls drawn. The format is aligned with the test expectations. *
 *******************************************************************/
 void printResults(int pickFrom, int numPicks) {
-    double totalWays = computeWays(pickFrom, numPicks);  // Total possible outcomes
-    double totalOutcomes = computeWays(pickFrom, numPicks);
+    // Calculate the number of ways to win (combinations)
+    double totalWays = computeWays(pickFrom, numPicks);
 
-    // Calculate probability and odds
-    double probability = 1.0 / totalOutcomes; // Probabilty of winning
-    double odds = 1.0 / probability - 1;  // Odds of winning
+    // Calculate probability (winning ways / total possible outcomes)
+    double probability = totalWays / computeWays(pickFrom, numPicks);
 
-    // Print results with appropriate formatting
+    // Odds calculation (inverse of probability)
+    double odds = 1.0 / probability - 1;
+
+    // Ensure results match expected format
     cout << fixed << setprecision(4); // Fixed point notation with 4 decimals
     cout << "Probability of winning is " << probability << endl;
     cout << "Odds of winning are 1 in " << static_cast<int>(odds) << endl;
     cout << "\nWould you like to calculate the probability of another scenario? (y/n): ";
 }
-
 
