@@ -29,7 +29,7 @@ void getInfo(int& pickFrom, int& numPicks) {
         // Validate pickFrom to ensure it's an integer between 1 and 12
         if (!(cin >> pickFrom) || pickFrom < 1 || pickFrom > 12) {
             clearInputStream();
-            cout << "Input Error! Please enter a number between 1 and 12.\n";
+            cout << "Input Error! There must be between 1 and 12 balls.\n";
             continue;
         }
 
@@ -57,6 +57,7 @@ void getInfo(int& pickFrom, int& numPicks) {
 * The formula for this is: n! / (k!(n - k)!)                       *
 *******************************************************************/
 double computeWays(int n, int k) {
+    if (k > n) return 0;
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
@@ -81,7 +82,7 @@ void printResults(int pickFrom, int numPicks) {
     // Calculate the number of ways to win (combinations)
     double successfulWays = computeWays(pickFrom, numPicks);
 
-    // Calculate total possible combinations from the pool
+    // Total outcomes are all possible draws from the available pool
     double totalOutcomes = computeWays(pickFrom, numPicks);
 
     // Calculate probability and odds
