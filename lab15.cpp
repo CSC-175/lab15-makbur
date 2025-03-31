@@ -1,16 +1,16 @@
-// lab15.cpp
-
 #include <iostream>
 #include <limits>
 using namespace std;
 
 // Function prototypes
-void getInfo(int& pickFrom, int& numPicks);
-double computeWays(int n, int k);
-double factorial(int n);
+void getInfo(int&, int&);
+double computeWays(int, int);
+double factorial(int);
 void clearInputStream(); // Utility function to clear input stream
 
-void clearInputStream() {
+// Function to clear any residual input in the stream
+void clearInputStream()
+{
     cin.clear(); // Clear the error state
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
 }
